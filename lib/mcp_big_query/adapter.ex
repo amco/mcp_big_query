@@ -19,7 +19,7 @@ defmodule McpBigQuery.Adapter do
 
   def describe_table(table) do
     {:ok, resp} =
-      Tables.bigquery_tables_get(conn(), @project, @dataset, table)
+      Tables.bigquery_tables_get(conn(), project_id(), dataset(), table)
 
     resp.schema.fields
     |> Enum.map(fn f ->
@@ -40,7 +40,7 @@ defmodule McpBigQuery.Adapter do
     }
 
     {:ok, resp} =
-      Jobs.bigquery_jobs_query(conn(), @project, body: request)
+      Jobs.bigquery_jobs_query(conn(), project_id(), body: request)
 
     rows =
       resp.rows || []
