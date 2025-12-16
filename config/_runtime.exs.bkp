@@ -1,0 +1,7 @@
+import Config
+
+config :goth,
+  keyfile: ""
+
+config :mcp_big_query,
+  api_key: ""
