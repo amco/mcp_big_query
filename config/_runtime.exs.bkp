@@ -4,4 +4,6 @@ config :goth,
   keyfile: ""
 
 config :mcp_big_query,
+  server_url: ""
+  http_port: 4000
   api_key: ""
