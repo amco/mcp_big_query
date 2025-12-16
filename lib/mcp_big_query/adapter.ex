@@ -66,10 +66,10 @@ defmodule McpBigQuery.Adapter do
   end
 
   defp project_id do
-    Application.get(:mcp_big_query, :project_id)
+    Application.get_env(:mcp_big_query, :project_id)
   end
 
   defp dataset do
-    Application.get(:mcp_big_query, :dataset)
+    Application.get_env(:mcp_big_query, :dataset)
   end
 end
