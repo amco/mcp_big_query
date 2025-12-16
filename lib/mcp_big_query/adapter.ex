@@ -4,9 +4,6 @@ defmodule McpBigQuery.Adapter do
   alias GoogleApi.BigQuery.V2.Connection
   alias GoogleApi.BigQuery.V2.Model.QueryRequest
 
-  @project "amco-devops-training"
-  @dataset "demofin"
-
   defp conn do
     {:ok, token} = Goth.fetch(McpBigQuery.Goth)
     Connection.new(token.token)
@@ -14,7 +11,7 @@ defmodule McpBigQuery.Adapter do
 
   def list_tables do
     {:ok, resp} =
-      Tables.bigquery_tables_list(conn(), @project, @dataset)
+      Tables.bigquery_tables_list(conn(), project_id(), dataset())
 
     resp.tables
     |> Enum.map(& &1.tableReference.tableId)
@@ -66,5 +63,13 @@ defmodule McpBigQuery.Adapter do
     if Regex.match?(forbidden, sql) do
       raise "Only SELECT queries are allowed"
     end
+  end
+
+  defp project_id do
+    Application.get(:mcp_big_query, :project_id)
+  end
+
+  defp dataset do
+    Application.get(:mcp_big_query, :dataset)
   end
 end

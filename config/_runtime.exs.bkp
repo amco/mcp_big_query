@@ -4,6 +4,8 @@ config :goth,
   keyfile: ""
 
 config :mcp_big_query,
+  project_id: "",
+  dataset: "",
   server_url: ""
   http_port: 4000
   api_key: ""
