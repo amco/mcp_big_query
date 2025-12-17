@@ -8,6 +8,12 @@ defmodule McpBigQuery.Tools.ListTables do
   alias Hermes.Server.Response
 
   def execute(%{}, frame) do
-    {:reply, Response.json(Response.tool(), Adapter.list_tables()), frame}
+    case assigns do
+      %{authorized: true} ->
+        {:reply, Response.json(Response.tool(), Adapter.list_tables()), frame}
+
+      _else ->
+        {:error, "Unauthorized"}
+    end
   end
 end

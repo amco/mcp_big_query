@@ -9,6 +9,12 @@ defmodule McpBigQuery.Tools.DescribeTable do
   alias Hermes.Server.Response
 
   def execute(%{table_name: name}, frame) do
-    {:reply, Response.json(Response.tool(), Adapter.describe_table(name)), frame}
+    case assigns do
+      %{authorized: true} ->
+        {:reply, Response.json(Response.tool(), Adapter.describe_table(name)), frame}
+
+      _else ->
+        {:error, "Unauthorized"}
+    end
   end
 end

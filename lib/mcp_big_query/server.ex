@@ -12,16 +12,16 @@ defmodule McpBigQuery.Server do
   def init(_arg, frame) do
     headers = frame.transport[:req_headers]
 
-    case List.keyfind(headers, "x-api-key", 0) do
-      {_, api_key} when is_binary(api_key) and byte_size(api_key) > 0 ->
-        case authenticate_api_key(api_key) do
-          true -> {:ok, Map.put(frame, :assigns, %{authorized: true})}
-          _ -> {:stop, :unauthorized}
-        end
+    auhtorized =
+      case List.keyfind(headers, "x-api-key", 0) do
+        {_, api_key} when is_binary(api_key) and byte_size(api_key) > 0 ->
+          authenticate_api_key(api_key)
 
-      _ ->
-        {:stop, :unauthorized}
-    end
+        _ ->
+          false
+      end
+
+    {:ok, Map.put(frame, :assigns, %{authorized: authorized})}
   end
 
   defp authenticate_api_key(key) do
