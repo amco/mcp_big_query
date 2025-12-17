@@ -12,7 +12,7 @@ defmodule McpBigQuery.Server do
   def init(_arg, frame) do
     headers = frame.transport[:req_headers]
 
-    auhtorized =
+    authorized =
       case List.keyfind(headers, "x-api-key", 0) do
         {_, api_key} when is_binary(api_key) and byte_size(api_key) > 0 ->
           authenticate_api_key(api_key)
