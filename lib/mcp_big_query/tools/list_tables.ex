@@ -8,7 +8,7 @@ defmodule McpBigQuery.Tools.ListTables do
   alias Hermes.Server.Response
 
   def execute(%{}, frame) do
-    case assigns do
+    case Map.get(frame, :assigns) do
       %{authorized: true} ->
         {:reply, Response.json(Response.tool(), Adapter.list_tables()), frame}
 

@@ -9,7 +9,7 @@ defmodule McpBigQuery.Tools.ExecuteQuery do
   alias Hermes.Server.Response
 
   def execute(%{query: query}, frame) do
-    case assigns do
+    case Map.get(frame, :assigns) do
       %{authorized: true} ->
         {:reply, Response.json(Response.tool(), Adapter.execute_query(query)), frame}
 
