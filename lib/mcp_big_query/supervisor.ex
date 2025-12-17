@@ -9,11 +9,12 @@ defmodule McpBigQuery.Supervisor do
 
   @impl true
   def init(_opts) do
-    children = [
-      Hermes.Server.Registry,
-      {McpBigQuery.Server, transport: {:streamable_http, base_url: ServerConfig.server_url()}},
-      {Bandit, plug: McpBigQuery.Router, port: ServerConfig.http_port()}
-    ] ++ GothConfig.child_spec()
+    children =
+      [
+        Hermes.Server.Registry,
+        {McpBigQuery.Server, transport: {:streamable_http, base_url: ServerConfig.server_url()}},
+        {Bandit, plug: McpBigQuery.Router, port: ServerConfig.http_port()}
+      ] ++ GothConfig.child_spec()
 
     Supervisor.init(children, strategy: :one_for_one)
   end

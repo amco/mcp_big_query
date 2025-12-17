@@ -3,10 +3,7 @@ defmodule McpBigQuery.GothConfig do
 
   def child_spec do
     [
-      {Goth,
-        name: McpBigQuery.Goth,
-        source: {:service_account, credentials(), [scopes: @scopes]}
-      }
+      {Goth, name: McpBigQuery.Goth, source: {:service_account, credentials(), [scopes: @scopes]}}
     ]
   end
 

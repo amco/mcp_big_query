@@ -2,7 +2,7 @@ defmodule McpBigQuery.Tools.ExecuteQuery do
   use Hermes.Server.Component, type: :tool
 
   schema do
-    field :query, :string, required: true
+    field(:query, :string, required: true)
   end
 
   alias McpBigQuery.Adapter

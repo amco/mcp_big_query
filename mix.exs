@@ -15,7 +15,7 @@ defmodule McpBigQuery.MixProject do
   def application do
     [
       mod: {McpBigQuery.Application, []},
-      extra_applications: [:logger, :goth, :hermes_mcp],
+      extra_applications: [:logger, :goth, :hermes_mcp]
     ]
   end
 

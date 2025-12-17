@@ -3,12 +3,13 @@ defmodule McpBigQuery.Router do
 
   alias McpBigQuery.Server
 
-  plug Plug.Parsers,
+  plug(Plug.Parsers,
     parsers: [:json],
     json_decoder: Jason
+  )
 
-  plug :match
-  plug :dispatch
+  plug(:match)
+  plug(:dispatch)
 
-  forward "/mcp", to: Hermes.Server.Transport.StreamableHTTP.Plug, init_opts: [server: Server]
+  forward("/mcp", to: Hermes.Server.Transport.StreamableHTTP.Plug, init_opts: [server: Server])
 end

@@ -5,9 +5,9 @@ defmodule McpBigQuery.Server do
     protocol_version: "2025-03-26",
     capabilities: [:tools]
 
-  component McpBigQuery.Tools.ListTables
-  component McpBigQuery.Tools.DescribeTable
-  component McpBigQuery.Tools.ExecuteQuery
+  component(McpBigQuery.Tools.ListTables)
+  component(McpBigQuery.Tools.DescribeTable)
+  component(McpBigQuery.Tools.ExecuteQuery)
 
   def init(_arg, frame) do
     headers = frame.transport[:req_headers]
@@ -29,4 +29,3 @@ defmodule McpBigQuery.Server do
     api_key == key
   end
 end
-

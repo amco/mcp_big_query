@@ -10,25 +10,33 @@ defmodule McpBigQuery.Adapter do
   end
 
   def list_tables do
-    {:ok, resp} =
-      Tables.bigquery_tables_list(conn(), project_id(), dataset())
+    Tables.bigquery_tables_list(conn(), project_id(), dataset())
+    |> case do
+      {:ok, resp} ->
+        resp.tables
+        |> Enum.map(& &1.tableReference.tableId)
 
-    resp.tables
-    |> Enum.map(& &1.tableReference.tableId)
+      {:error, reason} ->
+        %{code: :unavailable, message: "BigQuery unavailable", details: inspect(reason)}
+    end
   end
 
   def describe_table(table) do
-    {:ok, resp} =
-      Tables.bigquery_tables_get(conn(), project_id(), dataset(), table)
+    Tables.bigquery_tables_get(conn(), project_id(), dataset(), table)
+    |> case do
+      {:ok, resp} ->
+        resp.schema.fields
+        |> Enum.map(fn f ->
+          %{
+            name: f.name,
+            type: f.type,
+            mode: f.mode
+          }
+        end)
 
-    resp.schema.fields
-    |> Enum.map(fn f ->
-      %{
-        name: f.name,
-        type: f.type,
-        mode: f.mode
-      }
-    end)
+      {:error, reason} ->
+        %{code: :unavailable, message: "BigQuery unavailable", details: inspect(reason)}
+    end
   end
 
   def execute_query(sql) do
@@ -39,21 +47,22 @@ defmodule McpBigQuery.Adapter do
       useLegacySql: false
     }
 
-    {:ok, resp} =
-      Jobs.bigquery_jobs_query(conn(), project_id(), body: request)
+    Jobs.bigquery_jobs_query(conn(), project_id(), body: request)
+    |> case do
+      {:ok, resp} ->
+        rows = resp.rows || []
+        fields = resp.schema.fields
 
-    rows =
-      resp.rows || []
+        Enum.map(rows, fn row ->
+          Enum.zip(fields, row.f)
+          |> Enum.into(%{}, fn {field, cell} ->
+            {field.name, cell.v}
+          end)
+        end)
 
-    fields =
-      resp.schema.fields
-
-    Enum.map(rows, fn row ->
-      Enum.zip(fields, row.f)
-      |> Enum.into(%{}, fn {field, cell} ->
-        {field.name, cell.v}
-      end)
-    end)
+      {:error, reason} ->
+        %{code: :unavailable, message: "BigQuery unavailable", details: inspect(reason)}
+    end
   end
 
   defp validate_sql!(sql) do

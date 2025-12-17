@@ -2,7 +2,7 @@ defmodule McpBigQuery.Tools.DescribeTable do
   use Hermes.Server.Component, type: :tool
 
   schema do
-    field :table_name, :string, required: true
+    field(:table_name, :string, required: true)
   end
 
   alias McpBigQuery.Adapter
