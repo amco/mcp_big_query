@@ -1,28 +1,16 @@
 defmodule McpBigQuery.Application do
   use Application
 
+  alias McpBigQuery.GothConfig
+
   def start(_type, _args) do
     children = [
       Hermes.Server.Registry,
       {McpBigQuery.Server, transport: {:streamable_http, base_url: server_url()}},
       {Bandit, plug: McpBigQuery.Router, port: http_port()}
-    ] ++ goth()
+    ] ++ GothConfig.child_spec()
 
     Supervisor.start_link(children, strategy: :one_for_one)
-  end
-
-  defp goth do
-    credentials =
-      Application.get_env(:goth, :keyfile)
-      |> File.read!()
-      |> Jason.decode!()
-
-    [
-      {Goth,
-        name: McpBigQuery.Goth,
-        source: {:service_account, credentials, [scopes: ["https://www.googleapis.com/auth/cloud-platform"]]}
-      }
-    ]
   end
 
   defp http_port do
