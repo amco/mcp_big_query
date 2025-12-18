@@ -9,7 +9,7 @@ defmodule McpBigQuery.GothConfig do
       credentials ->
         [
           {Goth,
-           name: McpBigQuery.Goth, source: {:service_account, credentials(), [scopes: @scopes]}}
+           name: McpBigQuery.Goth, source: {:service_account, credentials, [scopes: @scopes]}}
         ]
     end
   end
