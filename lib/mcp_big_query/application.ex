@@ -7,7 +7,7 @@ defmodule McpBigQuery.Application do
     children =
       [
         Hermes.Server.Registry,
-        {McpBigQuery.Server, transport: {:streamable_http, base_url: ServerConfig.server_url()}},
+        {McpBigQuery.Server, transport: {:streamable_http, base_url: ServerConfig.server_url()}}
       ] ++ GothConfig.child_spec() ++ http_server()
 
     Supervisor.start_link(children, strategy: :one_for_one)
